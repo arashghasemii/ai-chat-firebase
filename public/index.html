@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title data-i18n="title">چت با هوش مصنوعی</title>
+
+  <!-- Bootstrap RTL -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+
+  <!-- فونت فارسی Vazir -->
+  <link href="https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.css" rel="stylesheet" />
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <style>
+    body {
+      background-color: #eef1f4;
+      font-family: 'Vazir', Tahoma, sans-serif;
+    }
+
+    .chat-container {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      margin-top: 3rem;
+      border-radius: 15px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-bubble {
+      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 20px;
+      margin-bottom: 0;
+      line-height: 1.5;
+      opacity: 0;
+      animation: fadeIn 0.5s forwards;
+    }
+
+    .from-user {
+      background-color: #d1e7dd;
+    }
+
+    .from-ai {
+      background-color: #f8d7da;
+    }
+
+
+    .chat-box {
+      display: flex;
+      flex-direction: column;
+    }
+
+
+
+    #messages {
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 1rem 0;
+    }
+
+    .bubble-wrapper {
+      display: flex;
+      margin-bottom: 10px;
+    }
+
+    /* فارسی */
+    .bubble-wrapper.user-fa {
+      justify-content: flex-start;
+    }
+
+    .bubble-wrapper.user-fa .chat-bubble {
+      border-radius: 20px;
+      border-bottom-right-radius: 0;
+    }
+
+    .bubble-wrapper.ai-fa {
+      justify-content: flex-end;
+    }
+
+    .bubble-wrapper.ai-fa .chat-bubble {
+      border-radius: 20px;
+      border-bottom-left-radius: 0;
+    }
+
+    /* انگلیسی */
+    .bubble-wrapper.user-en {
+      justify-content: flex-start;
+    }
+
+    .bubble-wrapper.user-en .chat-bubble {
+      border-radius: 20px;
+      border-bottom-left-radius: 0;
+    }
+
+    .bubble-wrapper.ai-en {
+      justify-content: flex-end;
+    }
+
+    .bubble-wrapper.ai-en .chat-bubble {
+      border-radius: 20px;
+      border-bottom-right-radius: 0;
+    }
+
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .typing {
+      font-style: italic;
+      color: gray;
+      margin-bottom: 0.5rem;
+      animation: fadeIn 0.5s forwards;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="chat-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="mb-0" data-i18n="title">چت با هوش مصنوعی</h4>
+      <button onclick="switchLang()" class="btn btn-outline-secondary btn-sm" id="lang-btn">EN</button>
+    </div>
+
+    <div id="login-section" class="d-grid gap-2 mb-3">
+      <button class="btn btn-primary" onclick="login()" data-i18n="login">ورود با گوگل</button>
+    </div>
+
+    <div id="chat-section" style="display: none;">
+      <div id="messages" class="mb-3 chat-box"></div>
+
+      <div class="input-group">
+        <input type="text" id="msg" class="form-control" data-i18n-placeholder="placeholder"
+          placeholder="پیامت را بنویس..." />
+        <button class="btn btn-success" onclick="sendMessage()" data-i18n="send">ارسال پیام</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
