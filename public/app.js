@@ -1,3 +1,4 @@
+
 const firebaseConfig = {
   apiKey: "AIzaSyCkkBnlaot79O0f2V2l7mDRd-A6QJaWwTU",
   authDomain: "happy-trainers-ebe2e.firebaseapp.com",
@@ -56,6 +57,7 @@ auth.getRedirectResult().then(result => {
     user = result.user;
     showChat();
     loadMessages();
+    updateLoginButton();
   }
 });
 
@@ -64,6 +66,7 @@ auth.onAuthStateChanged(u => {
     user = u;
     showChat();
     loadMessages();
+    updateLoginButton();
   } else {
     showLogin();
   }
@@ -71,7 +74,9 @@ auth.onAuthStateChanged(u => {
 
 function login() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  if (/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+  const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
+  if (isMobile) {
     auth.signInWithRedirect(provider);
   } else {
     auth.signInWithPopup(provider)
@@ -79,10 +84,21 @@ function login() {
         user = auth.currentUser;
         showChat();
         loadMessages();
+        updateLoginButton();
       })
-      .catch(err => {
-        console.error("خطا در ورود:", err.message);
-      });
+      .catch(err => console.error("خطا در ورود:", err.message));
+  }
+}
+
+
+function updateLoginButton() {
+  const loginBtn = document.getElementById("login-btn");
+  if (loginBtn && user.email) {
+    const welcomeText = lang === 'fa' ? '👋 خوش آمدید' : '👋 Welcome';
+    loginBtn.innerText = `${welcomeText} ${user.email}`;
+    loginBtn.classList.remove("btn-primary");
+    loginBtn.classList.add("btn-outline-success");
+    loginBtn.disabled = true;
   }
 }
 
@@ -169,7 +185,6 @@ function scrollToBottom(container) {
   container.scrollTop = container.scrollHeight;
 }
 
-// ارسال پیام با Enter
 window.addEventListener("load", () => {
   const msgInput = document.getElementById("msg");
   if (msgInput) {
